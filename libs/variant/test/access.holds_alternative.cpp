@@ -11,17 +11,17 @@
 #include <gtest/gtest.h>
 
 TEST(Access_HoldsAlternative, Typical) {
-  mpark::variant<int, std::string> v(42);
-  EXPECT_TRUE(mpark::holds_alternative<0>(v));
-  EXPECT_FALSE(mpark::holds_alternative<1>(v));
-  EXPECT_TRUE(mpark::holds_alternative<int>(v));
-  EXPECT_FALSE(mpark::holds_alternative<std::string>(v));
+  std::variant<int, std::string> v(42);
+  EXPECT_TRUE(std::holds_alternative<0>(v));
+  EXPECT_FALSE(std::holds_alternative<1>(v));
+  EXPECT_TRUE(std::holds_alternative<int>(v));
+  EXPECT_FALSE(std::holds_alternative<std::string>(v));
 
   /* constexpr */ {
-    constexpr mpark::variant<int, const char *> cv(42);
-    static_assert(mpark::holds_alternative<0>(cv), "");
-    static_assert(!mpark::holds_alternative<1>(cv), "");
-    static_assert(mpark::holds_alternative<int>(cv), "");
-    static_assert(!mpark::holds_alternative<const char *>(cv), "");
+    constexpr std::variant<int, const char *> cv(42);
+    static_assert(std::holds_alternative<0>(cv), "");
+    static_assert(!std::holds_alternative<1>(cv), "");
+    static_assert(std::holds_alternative<int>(cv), "");
+    static_assert(!std::holds_alternative<const char *>(cv), "");
   }
 }

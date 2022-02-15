@@ -17,20 +17,20 @@ using namespace std::string_literals;
 
 TEST(Variant, Intro) {
   // direct initialization.
-  mpark::variant<int, std::string> v("hello world!"s);
+  std::variant<int, std::string> v("hello world!"s);
 
   // direct access via reference.
-  EXPECT_EQ("hello world!"s, mpark::get<std::string>(v));
+  EXPECT_EQ("hello world!"s, std::get<std::string>(v));
 
   // bad access.
-  EXPECT_THROW(mpark::get<int>(v), mpark::bad_variant_access);
+  EXPECT_THROW(std::get<int>(v), std::bad_variant_access);
 
   // copy construction.
-  mpark::variant<int, std::string> w(v);
+  std::variant<int, std::string> w(v);
 
   // direct access via pointer.
-  EXPECT_FALSE(mpark::get_if<int>(&w));
-  EXPECT_TRUE(mpark::get_if<std::string>(&w));
+  EXPECT_FALSE(std::get_if<int>(&w));
+  EXPECT_TRUE(std::get_if<std::string>(&w));
 
   // diff-type assignment.
   v = 42;
@@ -41,7 +41,7 @@ TEST(Variant, Intro) {
   };  // unary
 
   // single visitation.
-  EXPECT_EQ(0, mpark::visit(unary{}, v));
+  EXPECT_EQ(0, std::visit(unary{}, v));
 
   // same-type assignment.
   w = "hello"s;
@@ -61,5 +61,5 @@ TEST(Variant, Intro) {
   };  // binary
 
   // binary visitation.
-  EXPECT_EQ(0, mpark::visit(binary{}, v, w));
+  EXPECT_EQ(0, std::visit(binary{}, v, w));
 }

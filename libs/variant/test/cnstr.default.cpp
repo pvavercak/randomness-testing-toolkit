@@ -13,11 +13,11 @@
 #include <gtest/gtest.h>
 
 TEST(Cnstr_Default, Variant) {
-  mpark::variant<int, std::string> v;
-  EXPECT_EQ(0, mpark::get<0>(v));
+  std::variant<int, std::string> v;
+  EXPECT_EQ(0, std::get<0>(v));
 
   /* constexpr */ {
-    constexpr mpark::variant<int> cv;
-    static_assert(0 == mpark::get<0>(cv), "");
+    constexpr std::variant<int> cv;
+    static_assert(0 == std::get<0>(cv), "");
   }
 }

@@ -16,21 +16,21 @@ using namespace std::string_literals;
 
 TEST(Cnstr_Copy, Value) {
   // `v`
-  mpark::variant<int, std::string> v("hello"s);
-  EXPECT_EQ("hello"s, mpark::get<std::string>(v));
+  std::variant<int, std::string> v("hello"s);
+  EXPECT_EQ("hello"s, std::get<std::string>(v));
   // `w`
-  mpark::variant<int, std::string> w(v);
-  EXPECT_EQ("hello"s, mpark::get<std::string>(w));
+  std::variant<int, std::string> w(v);
+  EXPECT_EQ("hello"s, std::get<std::string>(w));
   // Check `v`
-  EXPECT_EQ("hello"s, mpark::get<std::string>(v));
+  EXPECT_EQ("hello"s, std::get<std::string>(v));
 
   /* constexpr */ {
     // `cv`
-    constexpr mpark::variant<int, const char *> cv(42);
-    static_assert(42 == mpark::get<int>(cv), "");
+    constexpr std::variant<int, const char *> cv(42);
+    static_assert(42 == std::get<int>(cv), "");
     // `cw`
-    constexpr mpark::variant<int, const char *> cw(cv);
-    static_assert(42 == mpark::get<int>(cw), "");
+    constexpr std::variant<int, const char *> cw(cv);
+    static_assert(42 == std::get<int>(cw), "");
   }
 }
 
@@ -38,16 +38,16 @@ TEST(Cnstr_Copy, Value) {
 TEST(Cnstr_Copy, Ref) {
   std::string s = "hello"s;
   // `v`
-  mpark::variant<int &, std::string &> v(s);
-  EXPECT_EQ("hello"s, mpark::get<std::string &>(v));
-  EXPECT_EQ(&s, &mpark::get<std::string &>(v));
+  std::variant<int &, std::string &> v(s);
+  EXPECT_EQ("hello"s, std::get<std::string &>(v));
+  EXPECT_EQ(&s, &std::get<std::string &>(v));
   // `w`
-  mpark::variant<int &, std::string &> w(v);
-  EXPECT_EQ("hello"s, mpark::get<std::string &>(w));
-  EXPECT_EQ(&s, &mpark::get<std::string &>(w));
+  std::variant<int &, std::string &> w(v);
+  EXPECT_EQ("hello"s, std::get<std::string &>(w));
+  EXPECT_EQ(&s, &std::get<std::string &>(w));
   // Check `v`
-  EXPECT_EQ("hello"s, mpark::get<std::string &>(v));
-  EXPECT_EQ(&s, &mpark::get<std::string &>(v));
+  EXPECT_EQ("hello"s, std::get<std::string &>(v));
+  EXPECT_EQ(&s, &std::get<std::string &>(v));
 }
 #endif
 
@@ -61,9 +61,9 @@ TEST(Cnstr_Copy, ValuelessByException) {
     move_thrower_t &operator=(const move_thrower_t &) = default;
     move_thrower_t &operator=(move_thrower_t &&) = default;
   };  // move_thrower_t
-  mpark::variant<int, move_thrower_t> v(42);
+  std::variant<int, move_thrower_t> v(42);
   EXPECT_THROW(v = move_thrower_t{}, std::runtime_error);
   EXPECT_TRUE(v.valueless_by_exception());
-  mpark::variant<int, move_thrower_t> w(v);
+  std::variant<int, move_thrower_t> w(v);
   EXPECT_TRUE(w.valueless_by_exception());
 }

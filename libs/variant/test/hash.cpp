@@ -15,20 +15,20 @@
 using namespace std::string_literals;
 
 TEST(Hash, Monostate) {
-  mpark::variant<int, mpark::monostate, std::string> v(mpark::monostate{});
+  std::variant<int, std::monostate, std::string> v(std::monostate{});
   // Construct hash function objects.
-  std::hash<mpark::monostate> monostate_hash;
-  std::hash<mpark::variant<int, mpark::monostate, std::string>> variant_hash;
+  std::hash<std::monostate> monostate_hash;
+  std::hash<std::variant<int, std::monostate, std::string>> variant_hash;
   // Check the hash.
-  EXPECT_NE(monostate_hash(mpark::monostate{}), variant_hash(v));
+  EXPECT_NE(monostate_hash(std::monostate{}), variant_hash(v));
 }
 
 TEST(Hash, String) {
-  mpark::variant<int, std::string> v("hello"s);
-  EXPECT_EQ("hello"s, mpark::get<std::string>(v));
+  std::variant<int, std::string> v("hello"s);
+  EXPECT_EQ("hello"s, std::get<std::string>(v));
   // Construct hash function objects.
   std::hash<std::string> string_hash;
-  std::hash<mpark::variant<int, std::string>> variant_hash;
+  std::hash<std::variant<int, std::string>> variant_hash;
   // Check the hash.
   EXPECT_NE(string_hash("hello"s), variant_hash(v));
 }

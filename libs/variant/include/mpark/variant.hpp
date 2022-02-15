@@ -444,7 +444,7 @@ namespace mpark {
         template <typename F, typename... Fs>
         inline static constexpr void visit_visitor_return_type_check() {
           static_assert(all({std::is_same<F, Fs>::value...}),
-                        "`mpark::visit` requires the visitor to have a single "
+                        "`std::visit` requires the visitor to have a single "
                         "return type.");
         }
 
@@ -556,7 +556,7 @@ namespace mpark {
         inline static constexpr void visit_exhaustive_visitor_check() {
           static_assert(
               variants::lib::is_invocable<Visitor, Values...>::value,
-              "`mpark::visit` requires the visitor to be exhaustive.");
+              "`std::visit` requires the visitor to be exhaustive.");
         }
 
         template <typename Visitor>
@@ -1478,15 +1478,15 @@ namespace mpark {
 namespace std {
 
   template <typename... Ts>
-  struct hash<mpark::detail::enabled_type<
-      mpark::variant<Ts...>,
-      std::enable_if_t<mpark::detail::all(
-          {mpark::detail::hash::is_enabled<std::remove_const_t<Ts>>()...})>>> {
-    using argument_type = mpark::variant<Ts...>;
+  struct hash<std::detail::enabled_type<
+      std::variant<Ts...>,
+      std::enable_if_t<std::detail::all(
+          {std::detail::hash::is_enabled<std::remove_const_t<Ts>>()...})>>> {
+    using argument_type = std::variant<Ts...>;
     using result_type = std::size_t;
 
     inline result_type operator()(const argument_type &v) const {
-      using mpark::detail::visitation::variant;
+      using std::detail::visitation::variant;
       std::size_t result =
           v.valueless_by_exception()
               ? 299792458  // Random value chosen by the universe upon creation
@@ -1508,8 +1508,8 @@ namespace std {
   };
 
   template <>
-  struct hash<mpark::monostate> {
-    using argument_type = mpark::monostate;
+  struct hash<std::monostate> {
+    using argument_type = std::monostate;
     using result_type = std::size_t;
 
     inline result_type operator()(const argument_type &) const noexcept {

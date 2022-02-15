@@ -19,7 +19,7 @@ TEST(Assign_Copy, SameType) {
     Obj &operator=(Obj &&) = delete;
   };
   // `v`, `w`.
-  mpark::variant<Obj, int> v, w;
+  std::variant<Obj, int> v, w;
   // copy assignment.
   v = w;
 }
@@ -33,7 +33,7 @@ TEST(Assign_Copy, DiffType) {
     Obj &operator=(Obj &&) = delete;
   };
   // `v`, `w`.
-  mpark::variant<Obj, int> v(42), w;
+  std::variant<Obj, int> v(42), w;
   // move assignment.
   v = w;
 }
@@ -46,10 +46,10 @@ TEST(Assign_Copy, ValuelessByException) {
     move_thrower_t &operator=(const move_thrower_t &) = default;
     move_thrower_t &operator=(move_thrower_t &&) = default;
   };  // move_thrower_t
-  mpark::variant<int, move_thrower_t> v(42);
+  std::variant<int, move_thrower_t> v(42);
   EXPECT_THROW(v = move_thrower_t{}, std::runtime_error);
   EXPECT_TRUE(v.valueless_by_exception());
-  mpark::variant<int, move_thrower_t> w(42);
+  std::variant<int, move_thrower_t> w(42);
   w = v;
   EXPECT_TRUE(w.valueless_by_exception());
 }

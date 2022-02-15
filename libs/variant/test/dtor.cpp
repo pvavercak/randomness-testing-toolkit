@@ -20,7 +20,7 @@ TEST(Dtor, Value) {
   bool dtor_called = false;
   // Construct/Destruct `Obj`.
   {
-    mpark::variant<Obj> v(mpark::in_place_type<Obj>, dtor_called);
+    std::variant<Obj> v(std::in_place_type<Obj>, dtor_called);
   }
   // Check that the destructor was called.
   EXPECT_TRUE(dtor_called);
