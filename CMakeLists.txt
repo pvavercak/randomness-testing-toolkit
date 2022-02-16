@@ -18,7 +18,7 @@ add_library(cephes STATIC
 target_include_directories(cephes PUBLIC libs/cephes)
 add_library(cephes::cephes ALIAS cephes)
 
-add_executable(rtt
+add_executable(randomness_testing_toolkit
   src/batteries/batteryoutput.cpp
   src/batteries/configuration-batt.cpp
   src/batteries/dieharder/battery-dh.cpp
@@ -52,15 +52,31 @@ add_executable(rtt
   src/main.cpp
   src/storage/filestorage.cpp
   src/storage/istorage.cpp
-  src/storage/mysqlstorage.cpp
+  $<$<BOOL:${rtt_USE_SQL}>:src/storage/mysqlstorage.cpp>
   src/strings.cpp
   src/toolkitsettings.cpp
   src/utils.cpp
 )
-target_include_directories(rtt PRIVATE
+target_include_directories(randomness_testing_toolkit PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}libs/moderncppjson>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}include>
   PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-target_link_libraries(rtt PUBLIC cephes::cephes nlohmann_json::nlohmann_json mysqlcppconn)
+target_link_libraries(randomness_testing_toolkit PUBLIC
+  cephes::cephes
+  nlohmann_json::nlohmann_json
+  $<$<BOOL:${rtt_USE_SQL}>:mysqlcppconn>
+)
+
+# install binary
+install(TARGETS randomness_testing_toolkit
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+)
+
+# install regular files
+install(FILES LICENSE DESTINATION .)
+install(DIRECTORY configuration_files DESTINATION .
+  FILES_MATCHING PATTERN "*.json"
+)
